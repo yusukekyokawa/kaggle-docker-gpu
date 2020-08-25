@@ -1,0 +1,45 @@
+version: '2.3'
+services:
+  kaggle-gpu:
+    build:
+      context: ./Docker/kaggle-gpu
+      dockerfile: gpu.Dockerfile
+    container_name: kaggle-gpu
+    user: "${UID}:${GID}"
+    runtime: nvidia
+    command: /bin/bash
+    command: jupyter lab --port 9999 --ip=0.0.0.0  --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    ports:
+      - "7000:7000"
+      - "9999:9999"
+    tty: true
+    volumes:
+      - ./:/home
+  #   depends_on:
+  #     - mlflow
+  # tensorboard:
+  #   build:
+  #     context: ./Docker/tensorboard
+  #     dockerfile: Dockerfile
+  #   container_name: tensorboard
+  #   user: "${UID}:${GID}"
+  #   tty: true
+  #   ports:
+  #     - "6006:6006"
+  #   volumes: 
+  #     - "./logs:/logs"
+  #   command: tensorboard --logdir=./logs/ --host=0.0.0.0 
+
+  # mlflow:
+  #   build:
+  #     context: Docker/mlflow
+  #     dockerfile: Dockerfile
+  #   container_name: mlflow
+  #   user: "${UID}:${GID}"
+  #   expose:
+  #     - 5000
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./artifact:/artifact
+  #     - ./mlruns:/mlruns
